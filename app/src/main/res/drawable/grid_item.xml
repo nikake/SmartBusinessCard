@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android"
+
+    android:constantSize="true"
+    android:dither="true"
+    android:variablePadding="false"
+    android:visible="true">
+
+    <!-- Default state -->
+    <item android:drawable="@color/white"/>
+
+    <!-- Non selected items -->
+    <item android:state_selected="false" android:state_pressed="false" android:drawable="@color/white"/>
+    <item android:state_selected="false" android:state_pressed="true" android:drawable="@color/gray"/>
+
+    <!-- Selected items -->
+    <item android:state_selected="true" android:state_pressed="false" android:drawable="@color/cream"/>
+    <item android:state_selected="true" android:state_pressed="true" android:drawable="@color/gray"/>
+
+</selector>

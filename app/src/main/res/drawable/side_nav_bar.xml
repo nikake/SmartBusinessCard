@@ -1,0 +1,9 @@
+<shape xmlns:xlmns="http://schemas.android.com/apk/res/android"
+    xlmns:shape="rectangle">
+    <gradient
+        xlmns:angle="135"
+        xlmns:centerColor="@color/nav_header_center"
+        xlmns:endColor="@color/nav_header_end"
+        xlmns:startColor="@color/nav_header_start"
+        xlmns:type="linear" />
+</shape>

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content" >
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/update_profile_name" />
+
+        <EditText
+            android:id="@+id/update_profile_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/update_profile_name_hint"
+            android:shadowColor="@color/fadeText"
+            android:textColor="@color/black" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/update_profile_description" />
+
+        <EditText
+            android:id="@+id/update_profile_description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="top"
+            android:hint="@string/update_profile_description_hint"
+            android:lines="6"
+            android:shadowColor="@color/fadeText"
+            android:textColor="@color/black" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/update_profile_tags" />
+
+        <niklaskerlund.smartbusinesscard.util.ExpandableGridView
+            android:id="@+id/update_profile_tags"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:choiceMode="multipleChoice"
+            android:scrollbars="none"
+            android:isScrollContainer="false"
+            android:gravity="center"
+            android:horizontalSpacing="10dp"
+            android:numColumns="2"
+            android:stretchMode="columnWidth"
+            android:verticalSpacing="10dp" />
+
+        <Button
+            android:id="@+id/button_update_profile_photo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/buttons"
+            android:onClick="uploadPhoto"
+            android:text="@string/update_profile_photo"
+            android:textColor="@color/black" />
+
+        <Button
+            android:id="@+id/button_update_profile_save"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/buttons"
+            android:onClick="updateProfile"
+            android:text="@string/update_profile_save"
+            android:textColor="@color/black" />
+    </LinearLayout>
+</ScrollView>
