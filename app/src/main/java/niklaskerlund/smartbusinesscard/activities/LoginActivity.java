@@ -1,6 +1,7 @@
 package niklaskerlund.smartbusinesscard.activities;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -30,6 +31,7 @@ public class LoginActivity extends AppCompatActivity {
     private static final int REQUEST_SIGNUP = 0;
     private static final String MY_PREFERENCES = "MyPrefs";
 
+    private ProgressDialog progressDialog;
     private SharedPreferences sharedPreferences;
     private EditText etEmail, etPassword;
     private Button buttonSignIn;
@@ -62,10 +64,15 @@ public class LoginActivity extends AppCompatActivity {
     public void login(View view){
         Log.d(TAG, "Login");
 
+        progressDialog = new ProgressDialog(this, ProgressDialog.STYLE_SPINNER);
+        progressDialog.setTitle("Singing in");
+        progressDialog.setMessage("Authenticating..");
+        progressDialog.setCancelable(false);
+
+
         Firebase.AuthResultHandler authResultHandler = new Firebase.AuthResultHandler() {
             @Override
             public void onAuthenticated(AuthData authData) {
-                Toast.makeText(getBaseContext(), "Login success!", Toast.LENGTH_LONG).show();
 
                 // Save current users authentication to Firebase.
                 Map<String, Object> map = new HashMap<>();
@@ -100,6 +107,7 @@ public class LoginActivity extends AppCompatActivity {
         String userEmail = etEmail.getText().toString();
         String userPassword = etPassword.getText().toString();
 
+        progressDialog.show();
         firebase.authWithPassword(userEmail, userPassword, authResultHandler);
     }
 

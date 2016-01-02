@@ -26,6 +26,7 @@
     <string name="new_profile_email_hint">Enter your e-mail</string>
     <string name="new_profile_password_hint">Enter your password</string>
 
+    <string name="update_profile">Edit profile</string>
     <string name="update_profile_email">E-mail</string>
     <string name="update_profile_old_password">Old password</string>
     <string name="update_profile_name">Name</string>
@@ -54,4 +55,5 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
+    <string name="create_conference">Create conference</string>
 </resources>
