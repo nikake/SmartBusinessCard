@@ -56,4 +56,18 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="create_conference">Create conference</string>
+    <string name="create_conference_conf_info">Conference Info</string>
+    <string name="create_conference_name_hint">Name</string>
+    <string name="create_conference_description_hint">Description</string>
+    <string name="create_conference_date">Date</string>
+    <string name="create_conference_date_format">YYYY-MM-DD</string>
+    <string name="create_conference_time">Time</string>
+    <string name="create_conference_time_format">HH:MM</string>
+
+    <string name="create_conference_conf_address">Map Coordinates</string>
+    <string name="create_conference_position_false">Position not chosen.</string>
+    <string name="create_conference_position_true">Position chosen.</string>
+    <string name="create_conference_google_maps">Choose coordinates</string>
+
+    <string name="maps_save">Save</string>
 </resources>

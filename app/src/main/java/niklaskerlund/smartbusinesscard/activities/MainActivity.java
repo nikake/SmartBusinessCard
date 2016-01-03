@@ -185,7 +185,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     viewPager.setCurrentItem(2);
                 break;
             case R.id.new_conferences:
-                Toast.makeText(this, "New Conference", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(this, CreateConferenceActivity.class));
                 break;
             case R.id.conference_schedule:
                 Toast.makeText(this, "Conference Schedule", Toast.LENGTH_SHORT).show();

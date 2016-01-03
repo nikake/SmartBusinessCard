@@ -4,6 +4,7 @@
 
     <uses-sdk android:minSdkVersion="13"/>
     <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
 
     <application
         android:allowBackup="true"
@@ -11,6 +12,9 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme"
         android:name=".activities.SmartBusinessCardApplication">
+
+        <meta-data android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyApFn8chQruVdcAiDNpeeShQ4i9mqKDHRI"/>
 
         <activity android:name=".activities.MainActivity"
             android:label="@string/app_name"
@@ -45,6 +49,8 @@
             android:name=".activities.CreateConferenceActivity"
             android:label="@string/create_conference"
             android:parentActivityName=".activities.MainActivity" />
+        <activity android:name=".activities.MapPane"
+            android:parentActivityName=".activities.CreateConferenceActivity" />
     </application>
 
 </manifest>
