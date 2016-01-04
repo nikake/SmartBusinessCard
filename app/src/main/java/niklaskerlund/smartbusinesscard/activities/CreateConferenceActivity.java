@@ -63,10 +63,12 @@ public class CreateConferenceActivity extends AppCompatActivity {
     }
 
     public void createConference(View view){
-        Conference conference = new Conference(name.getText().toString(),
-                desc.getText().toString(), date.getText().toString(), time.getText().toString(), latitude, longitude, firebase.getAuth().getUid());
 
-        firebase.child("conferences").push().setValue(conference);
+        Firebase newConference = firebase.child("conferences").push();
+        Conference conference = new Conference(name.getText().toString(),
+                desc.getText().toString(), date.getText().toString(), time.getText().toString(), latitude, longitude, firebase.getAuth().getUid(), newConference.getKey());
+
+        newConference.setValue(conference);
 
         finish();
     }

@@ -10,7 +10,7 @@ import java.util.ArrayList;
  */
 public class Conference implements Comparable<Conference>{
 
-    private String name, description, date, startTime, endTime, owner;
+    private String name, description, date, startTime, endTime, owner, cid;
     private Double latitude, longitude;
     private ArrayList<User> invitedUsers;
     private ArrayList<User> attendingUsers;
@@ -20,7 +20,7 @@ public class Conference implements Comparable<Conference>{
 
     }
 
-    public Conference(String name, String description, String date, String startTime, double latitude, double longitude, String uid){
+    public Conference(String name, String description, String date, String startTime, double latitude, double longitude, String uid, String cid){
         setName(name);
         setDescription(description);
         setDate(date);
@@ -29,6 +29,7 @@ public class Conference implements Comparable<Conference>{
         setLatitude(latitude);
         setLongitude(longitude);
         setOwner(uid);
+        setCid(cid);
     }
 
     private void setName(String name) {
@@ -93,6 +94,14 @@ public class Conference implements Comparable<Conference>{
 
     public String getOwner() {
         return owner;
+    }
+
+    private void setCid(String cid) {
+        this.cid = cid;
+    }
+
+    public String getCid() {
+        return cid;
     }
 
     @Override

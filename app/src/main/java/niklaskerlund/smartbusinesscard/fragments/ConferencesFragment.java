@@ -1,21 +1,25 @@
 package niklaskerlund.smartbusinesscard.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.firebase.client.ChildEventListener;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
 
 import java.util.ArrayList;
 
 import niklaskerlund.smartbusinesscard.R;
+import niklaskerlund.smartbusinesscard.activities.ViewConferenceActivity;
 import niklaskerlund.smartbusinesscard.adapters.ConferenceAdapter;
 import niklaskerlund.smartbusinesscard.util.Conference;
 
@@ -50,6 +54,15 @@ public class ConferencesFragment extends Fragment {
         rootView = inflater.inflate(R.layout.fragment_conferences, container, false);
 
         listView = (ListView) rootView.findViewById(R.id.conference_list);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(view.getContext(), ViewConferenceActivity.class);
+                Conference conference = adapter.getItem(position);
+                intent.putExtra("cid",conference.getCid());
+                startActivity(intent);
+            }
+        });
         updateList();
         Log.d(TAG, conferences.toString());
 

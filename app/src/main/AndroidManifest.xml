@@ -44,7 +44,8 @@
             android:parentActivityName=".activities.MainActivity" />
         <activity
             android:name=".activities.ViewConferenceActivity"
-            android:parentActivityName=".activities.MainActivity" />
+            android:parentActivityName=".activities.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".activities.CreateConferenceActivity"
             android:label="@string/create_conference"
