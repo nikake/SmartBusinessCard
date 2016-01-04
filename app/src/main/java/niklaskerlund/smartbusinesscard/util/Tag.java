@@ -21,8 +21,6 @@ public enum Tag {
 
     private final String tagName;
     private final String index;
-    private final ArrayList<Tag> allTags = new ArrayList<>();
-    private boolean isSelected = false;
 
     Tag(String index, String tagName) {
         this.index = index;

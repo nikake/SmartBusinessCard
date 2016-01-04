@@ -8,7 +8,7 @@ import java.util.ArrayList;
 /**
  * Created by Niklas on 2015-12-28.
  */
-public class Conference {
+public class Conference implements Comparable<Conference>{
 
     private String name, description, date, startTime, endTime, owner;
     private Double latitude, longitude;
@@ -93,5 +93,23 @@ public class Conference {
 
     public String getOwner() {
         return owner;
+    }
+
+    @Override
+    public int compareTo(Conference another) {
+        return name.compareTo(another.name);
+    }
+
+    public boolean equals(Object o){
+        if(!(o instanceof Conference))
+            return false;
+        else {
+            Conference c = (Conference) o;
+            return name.equals(c.name);
+        }
+    }
+
+    public String toString(){
+        return name + ", " + description + ", " + date + ", " + startTime + ", " + latitude + ", " + longitude + ", " + owner;
     }
 }

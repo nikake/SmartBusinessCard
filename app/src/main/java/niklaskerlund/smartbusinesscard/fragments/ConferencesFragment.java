@@ -2,6 +2,7 @@ package niklaskerlund.smartbusinesscard.fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +24,7 @@ import niklaskerlund.smartbusinesscard.util.Conference;
  */
 public class ConferencesFragment extends Fragment {
 
+    private static final String TAG = "ConferenceFragment";
     private static final String ARG_SECTION_NUMBER = "section_number";
     private static final String FIREBASE_URL = "https://smartbusinesscard.firebaseio.com/";
     private View rootView;
@@ -49,6 +51,7 @@ public class ConferencesFragment extends Fragment {
 
         listView = (ListView) rootView.findViewById(R.id.conference_list);
         updateList();
+        Log.d(TAG, conferences.toString());
 
         return rootView;
     }
@@ -59,8 +62,12 @@ public class ConferencesFragment extends Fragment {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 Conference conference = dataSnapshot.getValue(Conference.class);
-                if(!conferences.contains(conference))
+                if (!conferences.contains(conference)) {
+                    Log.d(TAG, "Adding to List: " + conference.getName());
                     conferences.add(conference);
+                } else {
+                    Log.d(TAG, "Conference already exists in List: " + conference.getName());
+                }
             }
 
             @Override
