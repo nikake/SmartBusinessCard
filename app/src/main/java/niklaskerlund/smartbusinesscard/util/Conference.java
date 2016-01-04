@@ -10,18 +10,25 @@ import java.util.ArrayList;
  */
 public class Conference {
 
-    private String name, description, date, startTime, endTime;
-    private Location location;
+    private String name, description, date, startTime, endTime, owner;
+    private Double latitude, longitude;
     private ArrayList<User> invitedUsers;
     private ArrayList<User> attendingUsers;
     private ArrayList<User> nonAttendingUsers;
 
-    public Conference(String name, String description, String date, String startTime, String endTime){
+    public Conference() {
+
+    }
+
+    public Conference(String name, String description, String date, String startTime, double latitude, double longitude, String uid){
         setName(name);
         setDescription(description);
         setDate(date);
         setStartTime(startTime);
         setEndTime(endTime);
+        setLatitude(latitude);
+        setLongitude(longitude);
+        setOwner(uid);
     }
 
     private void setName(String name) {
@@ -64,7 +71,27 @@ public class Conference {
         return endTime;
     }
 
-    private void setLocation(Location location) {
+    private void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
 
+    public double getLatitude(){
+        return latitude;
+    }
+
+    private void setLongitude(double longitude) {
+        this.longitude = longitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    private void setOwner(String uid) {
+        this.owner = uid;
+    }
+
+    public String getOwner() {
+        return owner;
     }
 }

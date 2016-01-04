@@ -65,7 +65,7 @@ public class LoginActivity extends AppCompatActivity {
         Log.d(TAG, "Login");
 
         progressDialog = new ProgressDialog(this, ProgressDialog.STYLE_SPINNER);
-        progressDialog.setTitle("Singing in");
+        progressDialog.setTitle("Signing in");
         progressDialog.setMessage("Authenticating..");
         progressDialog.setCancelable(false);
 
@@ -86,6 +86,7 @@ public class LoginActivity extends AppCompatActivity {
                 editor.putString("Uid", authData.getUid());
                 editor.commit();
 
+                progressDialog.dismiss();
                 finish();
             }
 
@@ -93,14 +94,14 @@ public class LoginActivity extends AppCompatActivity {
             public void onAuthenticationError(FirebaseError error) {
                 switch(error.getCode()){
                     case FirebaseError.USER_DOES_NOT_EXIST:
-                        toastLong("User does not exist");
+                        progressDialog.setMessage("User does not exist.");
                     case FirebaseError.INVALID_PASSWORD:
-                        toastLong("Wrong password");
+                        progressDialog.setMessage("Wrong password.");
                     default:
-                        toastLong("Something went wrong");
+                        progressDialog.setMessage("Something went wrong.");
                         error.toException().printStackTrace();
                 }
-                Toast.makeText(getBaseContext(), "Error, try again", Toast.LENGTH_SHORT).show();
+                progressDialog.dismiss();
             }
         };
 
@@ -123,19 +124,6 @@ public class LoginActivity extends AppCompatActivity {
     public void onBackPressed(){
         moveTaskToBack(true);
     }
-
-    public void onLoginSuccess(String username){
-        Toast.makeText(getBaseContext(), "Sign in success!", Toast.LENGTH_SHORT).show();
-        Intent loginIntent = new Intent();
-        loginIntent.putExtra("result", username);
-        setResult(Activity.RESULT_OK, loginIntent);
-        finish();
-    }
-
-    public void onLoginFailed(){
-        Toast.makeText(getBaseContext(), "Sign in failed", Toast.LENGTH_LONG).show();
-    }
-
 
     /*
 

@@ -10,7 +10,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import niklaskerlund.smartbusinesscard.R;
-import niklaskerlund.smartbusinesscard.data.Tag;
+import niklaskerlund.smartbusinesscard.util.Tag;
 
 /**
  * Created by Niklas on 2015-12-28.
@@ -19,10 +19,6 @@ public class ProfileTagAdapter extends ArrayAdapter<Tag> {
     private ViewHolder viewHolder;
 
     public ProfileTagAdapter(Context context, int resource, ArrayList<Tag> objects) {
-        super(context, resource, objects);
-    }
-
-    public ProfileTagAdapter(Context context, int resource, Tag[] objects) {
         super(context, resource, objects);
     }
 

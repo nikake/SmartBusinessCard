@@ -1,18 +1,10 @@
 package niklaskerlund.smartbusinesscard.adapters;
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.content.ContextCompat;
-import android.text.Spannable;
-import android.text.SpannableStringBuilder;
-import android.text.Spanned;
-import android.text.style.ImageSpan;
 
-import niklaskerlund.smartbusinesscard.R;
-import niklaskerlund.smartbusinesscard.data.Tag;
 import niklaskerlund.smartbusinesscard.fragments.ConferencesFragment;
 import niklaskerlund.smartbusinesscard.fragments.ContactsFragment;
 import niklaskerlund.smartbusinesscard.fragments.ProfileFragment;

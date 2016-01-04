@@ -10,6 +10,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import niklaskerlund.smartbusinesscard.R;
+import niklaskerlund.smartbusinesscard.util.Conference;
 
 import com.firebase.client.Firebase;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -62,16 +63,10 @@ public class CreateConferenceActivity extends AppCompatActivity {
     }
 
     public void createConference(View view){
-        Map<String, Object> confData = new HashMap<>();
-        confData.put("name", name.getText().toString());
-        confData.put("description", desc.getText().toString());
-        confData.put("date", date.getText().toString());
-        confData.put("time", time.getText().toString());
-        confData.put("latitude", latitude);
-        confData.put("longitude", longitude);
-        confData.put("owner", firebase.getAuth().getUid());
+        Conference conference = new Conference(name.getText().toString(),
+                desc.getText().toString(), date.getText().toString(), time.getText().toString(), latitude, longitude, firebase.getAuth().getUid());
 
-        firebase.child("conferences").push().updateChildren(confData);
+        firebase.child("conferences").push().setValue(conference);
 
         finish();
     }

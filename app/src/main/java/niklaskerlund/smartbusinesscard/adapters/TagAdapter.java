@@ -1,4 +1,4 @@
-package niklaskerlund.smartbusinesscard.data;
+package niklaskerlund.smartbusinesscard.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -10,6 +10,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import niklaskerlund.smartbusinesscard.R;
+import niklaskerlund.smartbusinesscard.util.Tag;
 
 /**
  * Created by Niklas on 2015-12-28.

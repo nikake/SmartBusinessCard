@@ -20,8 +20,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import niklaskerlund.smartbusinesscard.R;
-import niklaskerlund.smartbusinesscard.data.Tag;
-import niklaskerlund.smartbusinesscard.data.TagAdapter;
+import niklaskerlund.smartbusinesscard.util.Tag;
+import niklaskerlund.smartbusinesscard.adapters.TagAdapter;
 import niklaskerlund.smartbusinesscard.util.ExpandableGridView;
 
 

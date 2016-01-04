@@ -17,7 +17,7 @@ import java.util.ArrayList;
 
 import niklaskerlund.smartbusinesscard.R;
 import niklaskerlund.smartbusinesscard.adapters.ProfileTagAdapter;
-import niklaskerlund.smartbusinesscard.data.Tag;
+import niklaskerlund.smartbusinesscard.util.Tag;
 import niklaskerlund.smartbusinesscard.util.ExpandableGridView;
 
 /**

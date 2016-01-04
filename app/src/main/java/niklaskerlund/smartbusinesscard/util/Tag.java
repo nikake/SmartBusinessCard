@@ -1,4 +1,4 @@
-package niklaskerlund.smartbusinesscard.data;
+package niklaskerlund.smartbusinesscard.util;
 
 import java.util.ArrayList;
 
