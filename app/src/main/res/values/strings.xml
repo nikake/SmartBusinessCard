@@ -69,5 +69,9 @@
     <string name="create_conference_position_true">Position chosen.</string>
     <string name="create_conference_google_maps">Choose coordinates</string>
 
+    <string name="conference_view_description">Description</string>
+    <string name="conference_view_name">Name</string>
+    <string name="conference_button">Check in</string>
+
     <string name="maps_save">Save</string>
 </resources>

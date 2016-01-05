@@ -14,15 +14,47 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
+            android:text="@string/conference_view_name"
             android:textSize="36sp"
-            android:textColor="@color/text_opacity_background"/>
+            android:textColor="@color/white"/>
+
+
+
+
     </RelativeLayout>
 
     <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="6">
+        android:layout_weight="5"
+        android:padding="8dp"
+        android:layout_marginTop="16dp"
+        android:background="@color/white">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/conference_view_description"
+            android:textSize="20sp"
+            />
+        <TextView android:id="@+id/view_conference_description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            />
+
 
     </LinearLayout>
+
+    <Button android:id="@+id/view_conference_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:text="@string/conference_button"
+        android:background="@drawable/buttons"
+        android:onClick="checkIn"
+        />
 
 </LinearLayout>
