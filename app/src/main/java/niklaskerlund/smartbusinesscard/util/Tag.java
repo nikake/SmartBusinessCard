@@ -32,7 +32,7 @@ public enum Tag {
     }
 
     public String toString(){
-        return tagName;
+        return index;
     }
 
 

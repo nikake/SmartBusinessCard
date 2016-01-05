@@ -1,5 +1,6 @@
 package niklaskerlund.smartbusinesscard.activities;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -10,9 +11,11 @@ import android.widget.Toast;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import niklaskerlund.smartbusinesscard.R;
+import niklaskerlund.smartbusinesscard.util.User;
 
 /**
  * Created by Niklas on 2015-12-22.
@@ -23,6 +26,7 @@ public class CreateAccountActivity extends AppCompatActivity {
 
     private Firebase firebase;
     private TextView email, password;
+    private SharedPreferences sharedPreferences;
 
     @Override
     public void onCreate(Bundle savedInstanceState){
@@ -45,6 +49,14 @@ public class CreateAccountActivity extends AppCompatActivity {
                 @Override
                 public void onSuccess(Map<String, Object> result) {
                     Toast.makeText(getBaseContext(), "Successfully created user account with uid: " + result.get("uid"), Toast.LENGTH_SHORT).show();
+                    Map<String, Object> userData = new HashMap<String, Object>();
+                    userData.put(result.get("uid").toString(), new User("", "No description written yet.", null));
+                    firebase.child("users").updateChildren(userData);
+
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putString("username", email.getText().toString());
+                    editor.commit();
+
                     finish();
                 }
 

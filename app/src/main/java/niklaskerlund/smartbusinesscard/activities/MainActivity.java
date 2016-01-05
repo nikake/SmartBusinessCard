@@ -58,8 +58,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if(activeUser == null){
             Intent loginIntent = new Intent(this, LoginActivity.class);
             startActivityForResult(loginIntent, CODE_LOGIN_SUCCESS);
-        } else {
-            Firebase userRef = firebase.child("users").child(activeUser.getUid());
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -93,8 +91,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 if (resultCode == CODE_LOGIN_SUCCESS) {
                     activeUser = firebase.getAuth();
                     activeUserRef = firebase.child(activeUser.getUid());
-                    Toast.makeText(getBaseContext(), "Welcome!", Toast.LENGTH_LONG).show();
-                    Log.d(TAG, "User logged in.");
                 }
                 break;
 
@@ -114,8 +110,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     protected void onDestroy() {
-        firebase.unauth();
-        Log.d(TAG, "Logging user out..");
         super.onDestroy();
     }
 

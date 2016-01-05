@@ -34,42 +34,37 @@ public class LoginActivity extends AppCompatActivity {
     private ProgressDialog progressDialog;
     private SharedPreferences sharedPreferences;
     private EditText etEmail, etPassword;
-    private Button buttonSignIn;
     private Firebase firebase;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        Log.d(TAG, "Creating context..");
         super.onCreate(savedInstanceState);
         this.setContentView(R.layout.activity_login);
 
         Firebase.setAndroidContext(this);
         etEmail = (EditText) findViewById(R.id.input_email);
         etPassword = (EditText) findViewById(R.id.input_password);
-        buttonSignIn = (Button) findViewById(R.id.button_login);
     }
 
     @Override
     public void onStart() {
-        Log.d(TAG, "Starting context..");
         super.onStart();
         firebase = new Firebase("https://smartbusinesscard.firebaseio.com");
         sharedPreferences = getSharedPreferences(MY_PREFERENCES, Context.MODE_PRIVATE);
-        String savedEmail = sharedPreferences.getString("Username", "");
+        String savedEmail = sharedPreferences.getString("username", "");
         if(!savedEmail.isEmpty()){
             etEmail.setText(savedEmail);
         }
     }
 
     public void login(View view){
-        Log.d(TAG, "Login");
-
+        // Initialize progressDialog
         progressDialog = new ProgressDialog(this, ProgressDialog.STYLE_SPINNER);
         progressDialog.setTitle("Signing in");
         progressDialog.setMessage("Authenticating..");
         progressDialog.setCancelable(false);
 
-
+        //Setup AuthenticationHandler to local firebase reference.
         Firebase.AuthResultHandler authResultHandler = new Firebase.AuthResultHandler() {
             @Override
             public void onAuthenticated(AuthData authData) {
@@ -82,8 +77,8 @@ public class LoginActivity extends AppCompatActivity {
 
                 // Save current user credentials to a shared preferences file.
                 SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putString("Username", etEmail.getText().toString());
-                editor.putString("Uid", authData.getUid());
+                editor.putString("username", etEmail.getText().toString());
+                editor.putString("uid", authData.getUid());
                 editor.commit();
 
                 progressDialog.dismiss();
@@ -108,7 +103,9 @@ public class LoginActivity extends AppCompatActivity {
         String userEmail = etEmail.getText().toString();
         String userPassword = etPassword.getText().toString();
 
+        // Start the progressdialog.
         progressDialog.show();
+        // Authenticate user with given credentials.
         firebase.authWithPassword(userEmail, userPassword, authResultHandler);
     }
 

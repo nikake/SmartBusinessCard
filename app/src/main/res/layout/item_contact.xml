@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/tab_contacts"
+    android:id="@+id/item_contact"
     android:layout_width="fill_parent"
     android:layout_height="72dp"
     android:paddingTop="8dp"
@@ -13,7 +13,7 @@
         android:layout_centerVertical="true"
         android:src="@drawable/standard_profile" />
     <LinearLayout android:id="@+id/contact_text"
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
@@ -24,13 +24,13 @@
         android:layout_alignWithParentIfMissing="true">
 
         <TextView android:id="@+id/contact_name"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="16sp"
             android:textColor="@color/black"
             android:text="Contact name" />
         <TextView android:id="@+id/contact_tags"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="14sp"
             android:text="Tag1, Tag2, Tag3, Tag4" />

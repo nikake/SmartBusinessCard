@@ -18,7 +18,6 @@ import niklaskerlund.smartbusinesscard.util.Conference;
 public class ConferenceAdapter extends ArrayAdapter<Conference> {
 
     private ViewHolder viewHolder;
-    TextView conferenceName, conferenceDescription, conferenceDate;
 
     public ConferenceAdapter(Context context, int resource, ArrayList<Conference> objects) {
         super(context, resource, objects);
@@ -43,14 +42,6 @@ public class ConferenceAdapter extends ArrayAdapter<Conference> {
         viewHolder.confName.setText(conference.getName());
         viewHolder.confDescription.setText(conference.getDescription());
         viewHolder.confDate.setText(conference.getDate());
-//        conferenceName = (TextView) convertView.findViewById(R.id.conference_name);
-//        conferenceName.setText(conference.getName());
-//
-//        conferenceDescription = (TextView) convertView.findViewById(R.id.conference_description);
-//        conferenceDescription.setText(conference.getDescription());
-//
-//        conferenceDate = (TextView) convertView.findViewById(R.id.conference_date);
-//        conferenceDate.setText(conference.getDate());
 
         return convertView;
     }

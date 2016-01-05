@@ -64,7 +64,6 @@ public class ConferencesFragment extends Fragment {
             }
         });
         updateList();
-        Log.d(TAG, conferences.toString());
 
         return rootView;
     }
