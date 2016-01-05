@@ -52,6 +52,8 @@
             android:parentActivityName=".activities.MainActivity" />
         <activity android:name=".activities.MapPane"
             android:parentActivityName=".activities.CreateConferenceActivity" />
+        <activity android:name=".activities.CheckInConference"
+            android:parentActivityName=".activities.ViewConferenceActivity"/>
     </application>
 
 </manifest>
