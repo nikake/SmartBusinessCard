@@ -50,7 +50,7 @@
             android:name=".activities.CreateConferenceActivity"
             android:label="@string/create_conference"
             android:parentActivityName=".activities.MainActivity" />
-        <activity android:name=".activities.MapPane"
+        <activity android:name=".activities.ConferenceMapActivity"
             android:parentActivityName=".activities.CreateConferenceActivity" />
         <activity android:name=".activities.CheckInConference"
             android:parentActivityName=".activities.ViewConferenceActivity"/>

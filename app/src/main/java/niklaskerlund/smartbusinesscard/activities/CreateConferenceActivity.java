@@ -1,22 +1,15 @@
 package niklaskerlund.smartbusinesscard.activities;
 
 import android.content.Intent;
-import android.location.Location;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import niklaskerlund.smartbusinesscard.R;
 import niklaskerlund.smartbusinesscard.util.Conference;
 
 import com.firebase.client.Firebase;
-import com.google.android.gms.common.api.GoogleApiClient;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by Niklas on 2015-12-30.
@@ -44,7 +37,7 @@ public class CreateConferenceActivity extends AppCompatActivity {
     }
 
     public void googleMap(View view) {
-        Intent intent = new Intent(this, MapPane.class);
+        Intent intent = new Intent(this, ConferenceMapActivity.class);
         startActivityForResult(intent, COORDINATES_SUCCESS_CODE);
     }
 

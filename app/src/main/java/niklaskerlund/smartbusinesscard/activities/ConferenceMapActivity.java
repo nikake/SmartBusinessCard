@@ -3,6 +3,7 @@ package niklaskerlund.smartbusinesscard.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.view.View;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -18,10 +19,10 @@ import niklaskerlund.smartbusinesscard.R;
 /**
  * Created by Niklas on 2016-01-03.
  */
-public class MapPane extends FragmentActivity implements OnMapReadyCallback {
+public class ConferenceMapActivity extends FragmentActivity implements OnMapReadyCallback, GoogleMap.OnMarkerDragListener {
 
+    private static final String TAG = "ConferenceMapActivity";
     private static final int COORDINATES_SUCCESS_CODE = 10;
-
     private double latitude, longitude;
     private Marker marker;
 
@@ -38,20 +39,38 @@ public class MapPane extends FragmentActivity implements OnMapReadyCallback {
 
     @Override
     public void onMapReady(GoogleMap map) {
-        LatLng tullinge = new LatLng(59.205, 17.907);
-        marker = map.addMarker(new MarkerOptions().position(tullinge).title("Marker in Tullinge").draggable(true));
-        map.moveCamera(CameraUpdateFactory.newLatLng(tullinge));
+        LatLng startingPosition = new LatLng(59.205, 17.907);
+        marker = map.addMarker(new MarkerOptions().position(startingPosition).title("Conference location").draggable(true));
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(startingPosition, 4));
+        map.setOnMarkerDragListener(this);
     }
 
     public void saveCoordinates(View view) {
         Intent intent = new Intent();
-        latitude = marker.getPosition().latitude;
-        longitude = marker.getPosition().longitude;
 
         intent.putExtra("lat", latitude);
         intent.putExtra("lon", longitude);
 
         setResult(COORDINATES_SUCCESS_CODE, intent);
         finish();
+    }
+
+    @Override
+    public void onMarkerDragStart(Marker marker) {
+
+    }
+
+    @Override
+    public void onMarkerDrag(Marker marker) {
+
+    }
+
+    @Override
+    public void onMarkerDragEnd(Marker marker) {
+        LatLng position = marker.getPosition();
+        Log.d(TAG, "Position: " + position.toString());
+
+        latitude = position.latitude;
+        longitude = position.longitude;
     }
 }

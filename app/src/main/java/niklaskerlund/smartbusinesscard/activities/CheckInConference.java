@@ -36,8 +36,8 @@ public class CheckInConference extends FragmentActivity implements OnMapReadyCal
         mapFragment.getMapAsync(this);
 
         Intent intent = getIntent();
-        longitude = intent.getDoubleExtra("longitude", 0);
         latitude = intent.getDoubleExtra("latitude", 0);
+        longitude = intent.getDoubleExtra("longitude", 0);
         firebase = new Firebase(intent.getStringExtra("cid"));
 
 
@@ -45,7 +45,7 @@ public class CheckInConference extends FragmentActivity implements OnMapReadyCal
 
     @Override
     public void onMapReady(GoogleMap map) {
-        LatLng conference = new LatLng(longitude, latitude);
+        LatLng conference = new LatLng(latitude, longitude);
         marker = map.addMarker(new MarkerOptions().position(conference).title("Conference location").draggable(false));
         map.moveCamera(CameraUpdateFactory.newLatLng(conference));
     }

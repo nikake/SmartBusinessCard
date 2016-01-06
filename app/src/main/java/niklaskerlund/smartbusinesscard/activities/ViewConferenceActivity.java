@@ -43,6 +43,7 @@ public class ViewConferenceActivity extends AppCompatActivity {
 
         setConferenceName();
         setConferenceDescription();
+        setConferenceLocation();
     }
 
     private void setConferenceName() {
