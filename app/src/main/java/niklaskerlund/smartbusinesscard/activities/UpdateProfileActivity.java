@@ -20,7 +20,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import niklaskerlund.smartbusinesscard.R;
-import niklaskerlund.smartbusinesscard.util.Tag;
+import niklaskerlund.smartbusinesscard.util.Interest;
 import niklaskerlund.smartbusinesscard.adapters.TagAdapter;
 import niklaskerlund.smartbusinesscard.util.ExpandableGridView;
 
@@ -35,21 +35,21 @@ public class UpdateProfileActivity extends AppCompatActivity {
     private Firebase firebase;
     private Firebase userRef;
     private ExpandableGridView gridView;
-    private Tag[] tags = new Tag[]{
-            Tag.ANDROID,
-            Tag.CPLUSPLUS,
-            Tag.CSHARP,
-            Tag.DEVELOPMENT,
-            Tag.EDUCATION,
-            Tag.INTERNET_OF_THINGS,
-            Tag.IT,
-            Tag.JAVA,
-            Tag.PROGRAMMING,
-            Tag.RECRIUTMENT,
-            Tag.SOCIAL_NETWORKING
+    private Interest[] interests = new Interest[]{
+            Interest.ANDROID,
+            Interest.CPLUSPLUS,
+            Interest.CSHARP,
+            Interest.DEVELOPMENT,
+            Interest.EDUCATION,
+            Interest.INTERNET_OF_THINGS,
+            Interest.IT,
+            Interest.JAVA,
+            Interest.PROGRAMMING,
+            Interest.RECRIUTMENT,
+            Interest.SOCIAL_NETWORKING
     };
 
-    ArrayList<Tag> selectedTags;
+    ArrayList<Interest> selectedInterests;
     TagAdapter adapter;
     TextView name, description;
 
@@ -62,7 +62,7 @@ public class UpdateProfileActivity extends AppCompatActivity {
         description = (TextView) findViewById(R.id.update_profile_description);
         gridView = (ExpandableGridView) findViewById(R.id.update_profile_tags);
 
-        selectedTags = new ArrayList<>();
+        selectedInterests = new ArrayList<>();
         initGridView();
 
         firebase = new Firebase("https://smartbusinesscard.firebaseio.com/");
@@ -74,19 +74,19 @@ public class UpdateProfileActivity extends AppCompatActivity {
     }
 
     private void initGridView() {
-        adapter = new TagAdapter(this, R.layout.item_tag, tags);
+        adapter = new TagAdapter(this, R.layout.item_tag, interests);
         gridView.setAdapter(adapter);
         gridView.setExpanded(true);
 
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Tag tag = adapter.getItem(position);
+                Interest interest = adapter.getItem(position);
                 CheckedTextView ctv = (CheckedTextView) view;
                 if (ctv.isChecked())
-                    selectedTags.add(tag);
+                    selectedInterests.add(interest);
                 else
-                    selectedTags.remove(tag);
+                    selectedInterests.remove(interest);
             }
         });
     }
@@ -152,8 +152,8 @@ public class UpdateProfileActivity extends AppCompatActivity {
             userData.put("description", description.getText().toString());
             userRef.updateChildren(userData);
 
-            // Update child for selected tags with Map<String, Object> selectedTags.
-            userRef.child("tags").setValue(selectedTags);
+            // Update child for selected interests with Map<String, Object> selectedInterests.
+            userRef.child("interests").setValue(selectedInterests);
 
             finish();
         }
@@ -177,7 +177,7 @@ public class UpdateProfileActivity extends AppCompatActivity {
         a) Check name.
         b) Check description or autofill it.
         c) Check profile picture or choose default.
-        d) Check interests/tags.
+        d) Check interests/interests.
     3. Update user profile.
     4. Finish activity. [User is sent back to MainActivity, resultCode = 1]
 

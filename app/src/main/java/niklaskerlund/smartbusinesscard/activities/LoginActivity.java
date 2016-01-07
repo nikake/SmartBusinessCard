@@ -69,11 +69,11 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onAuthenticated(AuthData authData) {
 
-                // Save current users authentication to Firebase.
-                Map<String, Object> map = new HashMap<>();
-                map.put("provider", authData.getProvider());
-                map.put("token", authData.getToken());
-                firebase.child("users").child(authData.getUid()).updateChildren(map);
+//                // Save current users authentication to Firebase.
+//                Map<String, Object> map = new HashMap<>();
+//                map.put("provider", authData.getProvider());
+//                map.put("token", authData.getToken());
+//                firebase.child("users").child(authData.getUid()).updateChildren(map);
 
                 // Save current user credentials to a shared preferences file.
                 SharedPreferences.Editor editor = sharedPreferences.edit();

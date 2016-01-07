@@ -50,7 +50,7 @@ public class CreateAccountActivity extends AppCompatActivity {
                 public void onSuccess(Map<String, Object> result) {
                     Toast.makeText(getBaseContext(), "Successfully created user account with uid: " + result.get("uid"), Toast.LENGTH_SHORT).show();
                     Map<String, Object> userData = new HashMap<String, Object>();
-                    userData.put(result.get("uid").toString(), new User("", "No description written yet.", null));
+                    userData.put(result.get("uid").toString(), new User("", "No description written yet.", null, null));
                     firebase.child("users").updateChildren(userData);
 
                     SharedPreferences.Editor editor = sharedPreferences.edit();

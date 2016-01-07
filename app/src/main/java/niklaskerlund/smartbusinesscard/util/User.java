@@ -1,9 +1,6 @@
 package niklaskerlund.smartbusinesscard.util;
 
-import android.graphics.Bitmap;
 
-import com.firebase.client.Firebase;
-import com.firebase.client.core.Tag;
 
 import java.util.ArrayList;
 
@@ -14,16 +11,18 @@ public class User implements Comparable<User> {
 
     private String name;
     private String description;
-    private ArrayList<Tag> tags;
+    private ArrayList<Interest> interests;
+    private ArrayList<String> contacts;
 
     public User() {
 
     }
 
-    public User(String name, String description, ArrayList<Tag> tags) {
+    public User(String name, String description, ArrayList<Interest> interests, ArrayList<String> contacts) {
         setName(name);
         setDescription(description);
-        setTags(tags);
+        setInterests(interests);
+        setContacts(contacts);
     }
 
     private void setName(String name) {
@@ -42,12 +41,26 @@ public class User implements Comparable<User> {
         return description;
     }
 
-    private void setTags(ArrayList<Tag> tags) {
-        this.tags = tags;
+    private void setInterests(ArrayList<Interest> interests) {
+        if (interests != null)
+            this.interests = interests;
+        else
+            this.interests = new ArrayList<>();
     }
 
-    public ArrayList<Tag> getTags(){
-        return tags;
+    public ArrayList<Interest> getInterests(){
+        return interests;
+    }
+
+    private void setContacts(ArrayList<String> contacts) {
+        if (contacts != null)
+            this.contacts = contacts;
+        else
+            this.contacts = new ArrayList<>();
+    }
+
+    public ArrayList<String> getContacts() {
+        return contacts;
     }
 
     public boolean equals(Object o) {

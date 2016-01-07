@@ -20,11 +20,8 @@ import com.firebase.client.ValueEventListener;
 import java.util.ArrayList;
 
 import niklaskerlund.smartbusinesscard.R;
-import niklaskerlund.smartbusinesscard.activities.ViewConferenceActivity;
 import niklaskerlund.smartbusinesscard.activities.ViewContactActivity;
-import niklaskerlund.smartbusinesscard.adapters.ConferenceAdapter;
 import niklaskerlund.smartbusinesscard.adapters.ContactsAdapter;
-import niklaskerlund.smartbusinesscard.util.Conference;
 import niklaskerlund.smartbusinesscard.util.User;
 
 /**
@@ -32,18 +29,19 @@ import niklaskerlund.smartbusinesscard.util.User;
  */
 public class ContactsFragment extends Fragment {
 
-    private static final String TAG = "ContactFragment";
+    private static final String TAG = ContactsFragment.class.getSimpleName();
     private static final String ARG_SECTION_NUMBER = "section_number";
-    private static final String FIREBASE_URL = "https://smartbusinesscard.firebaseio.com/";
+    private static final String FIREBASE_URL = "https://smartbusinesscard.firebaseio.com/users";
     private View rootView;
     private ListView listView;
     private Firebase firebase, userRef;
-    private ArrayList<String> contacts = new ArrayList<>();
+    private ArrayList<String> contactsUid = new ArrayList<>();
+    private ArrayList<User> contacts = new ArrayList<>();
     private ContactsAdapter adapter;
 
     public ContactsFragment() {
         firebase = new Firebase(FIREBASE_URL);
-        userRef = firebase.child("users").child(firebase.getAuth().getUid()).child("contacts");
+        userRef = firebase.child(firebase.getAuth().getUid()).child("contacts");
     }
 
     public static ContactsFragment newInstance(int sectionNumber) {
@@ -59,48 +57,34 @@ public class ContactsFragment extends Fragment {
         rootView = inflater.inflate(R.layout.fragment_contacts, container, false);
 
         listView = (ListView) rootView.findViewById(R.id.contact_list);
-
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(view.getContext(), ViewContactActivity.class);
-                String contactUid = adapter.getItem(position);
-                intent.putExtra("cid", contactUid);
+//                User contact = adapter.getItem(position);
+//                intent.putExtra("cid", contactUid);
                 startActivity(intent);
             }
         });
-
         updateList();
 
         return rootView;
     }
 
     private void updateList() {
-        userRef.addChildEventListener(new ChildEventListener() {
+        Log.d(TAG, "Updating contactsUid list.");
+        // Get strings from Users/UserID/Contacts
 
+        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                String contactUid = dataSnapshot.getValue(String.class);
-                if (!contacts.contains(contactUid)) {
-                    contacts.add(contactUid);
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot contactSnapshot : dataSnapshot.getChildren()) {
+                    String contactUid = contactSnapshot.getValue(String.class);
+                    if(!contactsUid.contains(contactUid)){
+                        contactsUid.add(contactUid);
+                        Log.d(TAG, "Added user to contactUid list: " + contactUid);
+                    }
                 }
-            }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-                String contactUid = dataSnapshot.getValue(String.class);
-                if (contacts.contains(contactUid))
-                    contacts.remove(contactUid);
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
             }
 
             @Override
@@ -109,6 +93,31 @@ public class ContactsFragment extends Fragment {
             }
         });
 
+        Query sortByName = firebase.orderByChild("name");
+        Log.d(TAG, "Updating contacts list.");
+        // Get Users from Users that match String in ArrayList contactsUid
+        sortByName.addListenerForSingleValueEvent( new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot contactSnapshot : dataSnapshot.getChildren()){
+                    User contact = contactSnapshot.getValue(User.class);
+                    if(contactsUid.contains(contactSnapshot.getKey())) {
+                        if(!contacts.contains(contact)){
+                            contacts.add(contact);
+                            Log.d(TAG, "Added user to contacts list: " + contact.getName());
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
+
+        Log.d(TAG, "Initiating adapter and ListView.");
+        // Initiate adapter and add it to the ListView.
         adapter = new ContactsAdapter(this.getContext(), R.layout.item_contact, contacts);
         listView.setAdapter(adapter);
     }

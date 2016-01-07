@@ -1,45 +1,33 @@
 package niklaskerlund.smartbusinesscard.adapters;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import com.firebase.client.ChildEventListener;
-import com.firebase.client.DataSnapshot;
-import com.firebase.client.Firebase;
-import com.firebase.client.FirebaseError;
-import com.firebase.client.ValueEventListener;
-
 import java.util.ArrayList;
 
 import niklaskerlund.smartbusinesscard.R;
-import niklaskerlund.smartbusinesscard.util.Conference;
-import niklaskerlund.smartbusinesscard.util.Tag;
+import niklaskerlund.smartbusinesscard.util.Interest;
 import niklaskerlund.smartbusinesscard.util.User;
 
 /**
  * Created by Niklas on 2015-12-30.
  */
-public class ContactsAdapter extends ArrayAdapter<String> {
+public class ContactsAdapter extends ArrayAdapter<User> {
 
-    private static final String FIREBASE_URL = "https://smartbusinesscard.firebaseio.com/";
+    private static final String TAG = ContactsAdapter.class.getSimpleName();
     private ViewHolder viewHolder;
-    private Firebase firebase, contactRef;
-    private ArrayList<Tag> contactTags = new ArrayList<>();
 
-
-    public ContactsAdapter(Context context, int resource, ArrayList<String> objects) {
+    public ContactsAdapter(Context context, int resource, ArrayList<User> objects) {
         super(context, resource, objects);
-        firebase = new Firebase(FIREBASE_URL);
     }
 
     public View getView(int position, View convertView, ViewGroup parent) {
-        String contactUid = getItem(position);
-
-        contactRef = firebase.child("users").child(contactUid);
+        User contact = getItem(position);
 
         if(convertView == null) {
             convertView = LayoutInflater.from(this.getContext()).inflate(R.layout.item_contact, parent, false);
@@ -53,23 +41,23 @@ public class ContactsAdapter extends ArrayAdapter<String> {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        setContactName();
+        viewHolder.contactName.setText(contact.getName());
+        if(contact.getInterests() != null )
+            viewHolder.contactTags.setText(listToString(contact.getInterests()));
+        Log.d(TAG, "InterestArrayList - Name: " + contact.getName() + " Interests: " + contact.getInterests());
 
         return convertView;
     }
 
-    public void setContactName() {
-        contactRef.child("name").addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                viewHolder.contactName.setText(dataSnapshot.getValue(String.class));
-            }
-
-            @Override
-            public void onCancelled(FirebaseError firebaseError) {
-
-            }
-        });
+    private String listToString(ArrayList<Interest> list){
+        String interestString = "";
+        int index = 0;
+        while(index < list.size() - 1) {
+            interestString += list.get(index).toString() + ", ";
+            index++;
+        }
+        interestString += list.get(index);
+        return interestString;
     }
 
     private static class ViewHolder {

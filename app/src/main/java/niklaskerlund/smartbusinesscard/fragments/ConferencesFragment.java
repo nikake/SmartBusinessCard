@@ -9,11 +9,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.firebase.client.ChildEventListener;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
+import com.firebase.client.Query;
 import com.firebase.client.ValueEventListener;
 
 import java.util.ArrayList;
@@ -28,9 +30,9 @@ import niklaskerlund.smartbusinesscard.util.Conference;
  */
 public class ConferencesFragment extends Fragment {
 
-    private static final String TAG = "ConferenceFragment";
+    private static final String TAG = ConferencesFragment.class.getSimpleName();
     private static final String ARG_SECTION_NUMBER = "section_number";
-    private static final String FIREBASE_URL = "https://smartbusinesscard.firebaseio.com/";
+    private static final String FIREBASE_URL = "https://smartbusinesscard.firebaseio.com/conferences";
     private View rootView;
     private ListView listView;
     private Firebase firebase;
@@ -68,35 +70,24 @@ public class ConferencesFragment extends Fragment {
         return rootView;
     }
 
+    /*
+    *   Fill the ArrayList with data.
+    *   Everytime a new Conference is added, it will add it to the list.
+     */
+
     private void updateList() {
-        firebase.child("conferences").addChildEventListener(new ChildEventListener() {
+        Query sortByDate = firebase.orderByChild("date");
+        // Add a listener for new children to the conference branch in the database.
 
+        sortByDate.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                Conference conference = dataSnapshot.getValue(Conference.class);
-                if (!conferences.contains(conference)) {
-                    Log.d(TAG, "Adding to List: " + conference.getName());
-                    conferences.add(conference);
-                } else {
-                    Log.d(TAG, "Conference already exists in List: " + conference.getName());
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot conferenceSnapshot : dataSnapshot.getChildren()) {
+                    Conference conference = conferenceSnapshot.getValue(Conference.class);
+                    if (!conferences.contains(conference)) {
+                        conferences.add(conference);
+                    }
                 }
-            }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-                Conference conference = dataSnapshot.getValue(Conference.class);
-                if(conferences.contains(conference))
-                    conferences.remove(conference);
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
             }
 
             @Override
@@ -105,6 +96,8 @@ public class ConferencesFragment extends Fragment {
             }
         });
 
+        Log.d(TAG, "Initiating adapter and ListView for ConferenceFragment");
+        // Initiate adapter and add it to the ListView.
         adapter = new ConferenceAdapter(this.getContext(), R.layout.item_conference, conferences);
         listView.setAdapter(adapter);
     }

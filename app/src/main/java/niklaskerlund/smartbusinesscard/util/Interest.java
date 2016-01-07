@@ -1,11 +1,9 @@
 package niklaskerlund.smartbusinesscard.util;
 
-import java.util.ArrayList;
-
 /**
  * Created by Niklas on 2015-12-21.
  */
-public enum Tag {
+public enum Interest {
 
     ANDROID("AND", "Android"),
     CPLUSPLUS("C++", "C++"),
@@ -22,13 +20,13 @@ public enum Tag {
     private final String tagName;
     private final String index;
 
-    Tag(String index, String tagName) {
+    Interest(String index, String tagName) {
         this.index = index;
         this.tagName = tagName;
     }
 
-    public String index(){
-        return index;
+    public String getTagName(){
+        return tagName;
     }
 
     public String toString(){

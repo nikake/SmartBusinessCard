@@ -68,12 +68,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-    }
-
-    @Override
-    public void onStart(){
-        super.onStart();
-
 
         viewPager = (ViewPager) findViewById(R.id.container);
         sectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(), this);
@@ -81,6 +75,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
+    }
+
+    @Override
+    public void onStart(){
+        super.onStart();
     }
 
     @Override
