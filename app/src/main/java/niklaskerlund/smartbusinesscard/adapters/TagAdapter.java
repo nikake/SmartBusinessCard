@@ -35,7 +35,7 @@ public class TagAdapter extends ArrayAdapter<Tag> {
         }
 
         TextView tagName = (TextView) convertView.findViewById(R.id.tag_text);
-        tagName.setText(tag.toString());
+        tagName.setText(tag.getTagName());
 
         return convertView;
     }

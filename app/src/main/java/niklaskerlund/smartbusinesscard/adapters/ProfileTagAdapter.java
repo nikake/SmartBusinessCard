@@ -30,7 +30,7 @@ public class ProfileTagAdapter extends ArrayAdapter<Tag> {
         }
 
         TextView tagName = (TextView) convertView.findViewById(R.id.profile_tag);
-        tagName.setText(tag.toString());
+        tagName.setText(tag.getTagName());
 
         return convertView;
     }

@@ -27,9 +27,7 @@ public enum Tag {
         this.tagName = tagName;
     }
 
-    public String index(){
-        return index;
-    }
+    public String getTagName(){ return tagName; }
 
     public String toString(){
         return index;
