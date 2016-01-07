@@ -27,7 +27,7 @@ public class ViewConferenceActivity extends AppCompatActivity {
     private final static String TAG = "ViewConferenceActivity";
     private final static String FIREBASE_URL = "https://smartbusinesscard.firebaseio.com/";
     Firebase firebase, confRef;
-    TextView name, description;
+    TextView name, description, date, time;
     private double longitude, latitude;
 
     @Override
@@ -40,10 +40,14 @@ public class ViewConferenceActivity extends AppCompatActivity {
         confRef = firebase.child("conferences").child(intent.getStringExtra("cid"));
         name = (TextView) findViewById(R.id.view_conference_name);
         description = (TextView) findViewById(R.id.view_conference_description);
+        date = (TextView) findViewById(R.id.view_conference_date);
+        time = (TextView) findViewById(R.id.view_conference_time);
 
         setConferenceName();
         setConferenceDescription();
         setConferenceLocation();
+        setConferenceDate();
+        setConferenceTime();
     }
 
     private void setConferenceName() {
@@ -91,6 +95,53 @@ public class ViewConferenceActivity extends AppCompatActivity {
             }
         });
     }
+
+    private void setConferenceDate() {
+        Log.d(TAG, "setConferenceDate: " + confRef);
+        confRef.child("date").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                String text = dataSnapshot.getValue(String.class);
+                if (text != null) {
+                    Log.d(TAG, "Setting text to: " + text);
+                    date.setText(text);
+                } else {
+                    Log.d(TAG, "Unable to set conference date.");
+                    date.setText("Unabled");
+                }
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+                description.setText("No date");
+                Log.d(TAG, "Cancelled");
+            }
+        });
+    }
+
+    private void setConferenceTime() {
+        Log.d(TAG, "setConferenceTime: " + confRef);
+        confRef.child("startTime").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                String text = dataSnapshot.getValue(String.class);
+                if (text != null) {
+                    Log.d(TAG, "Setting text to: " + text);
+                    time.setText(text);
+                } else {
+                    Log.d(TAG, "Unable to set conference time.");
+                    time.setText("Unabled");
+                }
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+                description.setText("No time");
+                Log.d(TAG, "Cancelled");
+            }
+        });
+    }
+
 
     private void setConferenceLocation() {
         Log.d(TAG, "setConferenceLongitude: " + confRef);

@@ -59,7 +59,7 @@ public class CreateConferenceActivity extends AppCompatActivity {
 
         Firebase newConference = firebase.child("conferences").push();
         Conference conference = new Conference(name.getText().toString(),
-                desc.getText().toString(), date.getText().toString(), time.getText().toString(), latitude, longitude, firebase.getAuth().getUid(), newConference.getKey());
+                desc.getText().toString(), date.getText().toString(), time.getText().toString(), latitude, longitude, firebase.getAuth().getUid(), newConference.getKey(), null);
 
         newConference.setValue(conference);
 

@@ -30,8 +30,6 @@ public class ContactsAdapter extends ArrayAdapter<String> {
     private ViewHolder viewHolder;
     private Firebase firebase, contactRef;
     private ArrayList<Tag> contactTags = new ArrayList<>();
-    private ArrayList<String> tagindex = new ArrayList<>();
-    private ContactsAdapter adapter;
 
 
     public ContactsAdapter(Context context, int resource, ArrayList<String> objects) {
@@ -57,10 +55,6 @@ public class ContactsAdapter extends ArrayAdapter<String> {
         }
 
         setContactName();
-        ArrayList<String> ar = new ArrayList<>();
-        for(Tag t : contactTags) {
-            ar.add(t.getTagName());
-        }
         setContactTags();
         return convertView;
     }
@@ -82,15 +76,14 @@ public class ContactsAdapter extends ArrayAdapter<String> {
     public void setContactTags(){
         contactRef.child("tags").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot snap){
+            public void onDataChange(DataSnapshot dataSnapshot) {
                 viewHolder.contactTags.setText(contactTags.toString());
             }
 
             @Override
-            public void onCancelled(FirebaseError firebaseError){
+            public void onCancelled(FirebaseError firebaseError) {
 
             }
-
         });
     }
 
