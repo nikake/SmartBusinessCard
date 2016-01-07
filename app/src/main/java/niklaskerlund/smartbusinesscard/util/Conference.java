@@ -4,6 +4,7 @@ import android.location.Location;
 import android.widget.ArrayAdapter;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Created by Niklas on 2015-12-28.
@@ -13,14 +14,14 @@ public class Conference implements Comparable<Conference>{
     private String name, description, date, startTime, endTime, owner, cid;
     private Double latitude, longitude;
     private ArrayList<User> invitedUsers;
-    private ArrayList<User> attendingUsers;
+    private HashMap<String, Object> users;
     private ArrayList<User> nonAttendingUsers;
 
     public Conference() {
 
     }
 
-    public Conference(String name, String description, String date, String startTime, double latitude, double longitude, String uid, String cid){
+    public Conference(String name, String description, String date, String startTime, double latitude, double longitude, String uid, String cid, HashMap<String, Object> users){
         setName(name);
         setDescription(description);
         setDate(date);
@@ -30,6 +31,7 @@ public class Conference implements Comparable<Conference>{
         setLongitude(longitude);
         setOwner(uid);
         setCid(cid);
+        setUsers(users);
     }
 
     private void setName(String name) {
@@ -102,6 +104,14 @@ public class Conference implements Comparable<Conference>{
 
     public String getCid() {
         return cid;
+    }
+
+    private void setUsers(HashMap<String, Object> users) {
+        this.users = users;
+    }
+
+    public HashMap<String, Object> getUsers() {
+        return users;
     }
 
     @Override
