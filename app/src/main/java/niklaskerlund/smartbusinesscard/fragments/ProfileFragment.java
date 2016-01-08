@@ -58,9 +58,6 @@ public class ProfileFragment extends Fragment {
         name = (TextView) rootView.findViewById(R.id.profile_name);
         description = (TextView) rootView.findViewById(R.id.profile_description);
         gridview = (ExpandableGridView) rootView.findViewById(R.id.profile_tags);
-//        setProfileName();
-//        setProfileDescription();
-//        setProfileTags();
 
         updateInfo();
 
@@ -90,77 +87,4 @@ public class ProfileFragment extends Fragment {
         gridview.setExpanded(true);
         Log.d(TAG, "Initialization finished.");
     }
-
-//    public void setProfileName(){
-//        userRef.child("name").addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(DataSnapshot dataSnapshot) {
-//                String text = dataSnapshot.getValue(String.class);
-//                if(text != null)
-//                    name.setText(text);
-//                else
-//                    name.setText("");
-//            }
-//
-//
-//            @Override
-//            public void onCancelled(FirebaseError firebaseError) {
-//                name.setText("");
-//            }
-//        });
-//    }
-//
-//    public void setProfileDescription(){
-//        userRef.child("description").addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(DataSnapshot dataSnapshot) {
-//                String text = dataSnapshot.getValue(String.class);
-//                if(text != null)
-//                    description.setText(text);
-//                else
-//                    description.setText("");
-//            }
-//
-//            @Override
-//            public void onCancelled(FirebaseError firebaseError) {
-//                description.setText("No description has been written yet.");
-//            }
-//        });
-//    }
-//
-//    public void setProfileTags() {
-//        userRef.child("interests").addChildEventListener(new ChildEventListener() {
-//            @Override
-//            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-//                Interest interest = dataSnapshot.getValue(Interest.class);
-//                if(!interests.contains(interest))
-//                    interests.add(interest);
-//            }
-//
-//            @Override
-//            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-//
-//            }
-//
-//            @Override
-//            public void onChildRemoved(DataSnapshot dataSnapshot) {
-//                Interest interest = dataSnapshot.getValue(Interest.class);
-//                if(interests.contains(interest))
-//                    interests.remove(interest);
-//            }
-//
-//            @Override
-//            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-//
-//            }
-//
-//            @Override
-//            public void onCancelled(FirebaseError firebaseError) {
-//
-//            }
-//        });
-//        adapter = new ProfileInterestAdapter(this.getContext(), R.layout.item_tag_profile, interests);
-//        gridview.setAdapter(adapter);
-//        gridview.setExpanded(true);
-//    }
 }
