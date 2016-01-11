@@ -55,7 +55,7 @@ public class ViewConferenceActivity extends AppCompatActivity implements
 
     Context context;
     Firebase firebase, confRef;
-    TextView name, description;
+    TextView name, description, date, time;
     private double userLatitude, userLongitude, confLatitude, confLongitude;
     private GoogleApiClient googleApiClient;
     private LocationRequest locationRequest;
@@ -73,6 +73,8 @@ public class ViewConferenceActivity extends AppCompatActivity implements
         confRef = firebase.child("conferences").child(intent.getStringExtra("cid"));
         name = (TextView) findViewById(R.id.view_conference_name);
         description = (TextView) findViewById(R.id.view_conference_description);
+        date = (TextView) findViewById(R.id.view_conference_date);
+        time = (TextView) findViewById(R.id.view_conference_time);
 
         currentapiVersion = android.os.Build.VERSION.SDK_INT;
         context = getBaseContext();
@@ -94,6 +96,8 @@ public class ViewConferenceActivity extends AppCompatActivity implements
                 Conference conference = dataSnapshot.getValue(Conference.class);
                 name.setText(conference.getName());
                 description.setText(conference.getDescription());
+                date.setText(conference.getDate());
+                time.setText(conference.getStartTime());
 
                 confLatitude = conference.getLatitude();
                 confLongitude = conference.getLongitude();
