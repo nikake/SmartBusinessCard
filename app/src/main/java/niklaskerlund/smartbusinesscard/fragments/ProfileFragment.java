@@ -72,7 +72,7 @@ public class ProfileFragment extends Fragment {
                 User user = dataSnapshot.getValue(User.class);
                 name.setText(user.getName());
                 description.setText(user.getDescription());
-                interests = user.getInterests();
+                interests = user.getInterests() ;
                 Log.d(TAG, "Userinfo updated. Name: " + user.getName() + " Description: " + user.getDescription() + "Interests: " + user.getInterests());
             }
 

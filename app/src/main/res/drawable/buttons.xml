@@ -6,4 +6,7 @@
     android:visible="true">
     <item android:state_pressed="false" android:drawable="@color/button" />
     <item android:state_pressed="true" android:drawable="@color/buttonPressed" />
+
+    <!-- If button is disabled, make it gray. -->
+    <item android:state_enabled="false" android:drawable="@color/gray"/>
 </selector>

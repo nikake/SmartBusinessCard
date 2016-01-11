@@ -9,6 +9,8 @@ import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
+import android.nfc.Tag;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
@@ -18,12 +20,14 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.firebase.client.ChildEventListener;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
+import com.firebase.client.Query;
 import com.firebase.client.ValueEventListener;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -33,10 +37,12 @@ import com.google.android.gms.location.LocationServices;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 import niklaskerlund.smartbusinesscard.R;
 import niklaskerlund.smartbusinesscard.util.Conference;
 import niklaskerlund.smartbusinesscard.util.Interest;
+import niklaskerlund.smartbusinesscard.util.User;
 
 /**
  * Created by Niklas on 2015-12-30.
@@ -54,13 +60,14 @@ public class ViewConferenceActivity extends AppCompatActivity implements
     private final static int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 12;
 
     Context context;
-    Firebase firebase, confRef;
-    TextView name, description, date, time;
+    Firebase firebase, confRef, userRef;
+    TextView name, description, date, time, feedback;
+    Button checkInButton;
     private double userLatitude, userLongitude, confLatitude, confLongitude;
     private GoogleApiClient googleApiClient;
     private LocationRequest locationRequest;
     private Location lastLocation;
-    private boolean requestingLocationUpdates;
+    private boolean requestingLocationUpdates, userCheckedIn;
     private int currentapiVersion;
 
     @Override
@@ -70,11 +77,15 @@ public class ViewConferenceActivity extends AppCompatActivity implements
 
         Intent intent = getIntent();
         firebase = new Firebase(FIREBASE_URL);
+        userRef = new Firebase(FIREBASE_URL).child("users").child(firebase.getAuth().getUid());
         confRef = firebase.child("conferences").child(intent.getStringExtra("cid"));
+
         name = (TextView) findViewById(R.id.view_conference_name);
         description = (TextView) findViewById(R.id.view_conference_description);
         date = (TextView) findViewById(R.id.view_conference_date);
         time = (TextView) findViewById(R.id.view_conference_time);
+        feedback = (TextView) findViewById(R.id.view_conference_feedback);
+        checkInButton = (Button) findViewById(R.id.view_conference_button);
 
         currentapiVersion = android.os.Build.VERSION.SDK_INT;
         context = getBaseContext();
@@ -86,6 +97,7 @@ public class ViewConferenceActivity extends AppCompatActivity implements
     @Override
     public void onStart() {
         updateInfo();
+        isUserCheckedIn();
         super.onStart();
     }
 
@@ -106,6 +118,32 @@ public class ViewConferenceActivity extends AppCompatActivity implements
             @Override
             public void onCancelled(FirebaseError firebaseError) {
 
+            }
+        });
+    }
+
+    public void isUserCheckedIn() {
+        Log.d(TAG, "isUserCheckedIn()");
+        Query query = confRef.child("users").child(firebase.getAuth().getUid());
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                String uid = dataSnapshot.getValue(String.class);
+                Log.d(TAG, "UserID: " + uid);
+                if (uid != null) {
+                    if (uid.equals(firebase.getAuth().getUid())) {
+                        Log.d(TAG, "User checked in.");
+                        giveFeedback();
+                        deactivateButton();
+                    } else {
+                        Log.d(TAG, "User not checked in.");
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+                Log.d(TAG, "Firebase Error: " + firebaseError.getCode() + "\n" + firebaseError.getMessage());
             }
         });
     }
@@ -146,7 +184,7 @@ public class ViewConferenceActivity extends AppCompatActivity implements
             dialog.show();
         } else {
             if (currentapiVersion >= android.os.Build.VERSION_CODES.M) {
-                if(permissionCheck == PackageManager.PERMISSION_DENIED) {
+                if (permissionCheck == PackageManager.PERMISSION_DENIED) {
                     if (ActivityCompat.shouldShowRequestPermissionRationale(this,
                             Manifest.permission.ACCESS_FINE_LOCATION)) {
 
@@ -196,7 +234,7 @@ public class ViewConferenceActivity extends AppCompatActivity implements
 
         try {
             lastLocation = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
-        } catch(SecurityException e) {
+        } catch (SecurityException e) {
             Log.d(TAG, e.getMessage());
         }
 
@@ -228,7 +266,7 @@ public class ViewConferenceActivity extends AppCompatActivity implements
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         Log.d(TAG, "Location services failed connecting. Please try again.");
 
-        if(connectionResult.hasResolution()) {
+        if (connectionResult.hasResolution()) {
             try {
                 connectionResult.startResolutionForResult(this, CONNECTION_FAILURE_RESOLUTION_REQUEST);
             } catch (IntentSender.SendIntentException e) {
@@ -256,8 +294,8 @@ public class ViewConferenceActivity extends AppCompatActivity implements
         handleNewLocation(location);
     }
 
-    private void initGPS(){
-        if(googleApiClient == null) {
+    private void initGPS() {
+        if (googleApiClient == null) {
             googleApiClient = new GoogleApiClient.Builder(this)
                     .addConnectionCallbacks(this)
                     .addOnConnectionFailedListener(this)
@@ -272,12 +310,14 @@ public class ViewConferenceActivity extends AppCompatActivity implements
                     .setFastestInterval(5000);
         }
         googleApiClient.connect();
-        if(userAtConference()) {
+        if (userAtConference()) {
+            Log.d(TAG, "User checked in.");
             registerUserToConference();
-//            deactivateButton();
-        }
-
-        else
+            giveFeedback();
+            deactivateButton();
+            Log.d(TAG, "Pairing users..");
+            pairUsers();
+        } else
             Log.d(TAG, "User not in range of Conference. User is not checked in.");
     }
 
@@ -287,27 +327,60 @@ public class ViewConferenceActivity extends AppCompatActivity implements
         confRef.child("users").updateChildren(attendingUser);
     }
 
-    private boolean userAtConference(){
+    private void giveFeedback() {
+        feedback.setText(R.string.conference_view_feedback_true);
+        feedback.setTextColor(getResources().getColor(R.color.green));
+    }
+
+    private void deactivateButton() {
+        checkInButton.setEnabled(false);
+        checkInButton.setClickable(false);
+    }
+
+    private boolean userAtConference() {
         boolean userAtConference = false;
 
         double latDiff = userLatitude - confLatitude;
         double lonDiff = userLongitude - confLongitude;
 
         Log.d(TAG, "Difference, Lat: " + latDiff + " Lon: " + lonDiff);
-        if((latDiff < 0.01 && latDiff > -0.01) && (lonDiff < 0.01 && lonDiff > -0.01))
+        if ((latDiff < 0.01 && latDiff > -0.01) && (lonDiff < 0.01 && lonDiff > -0.01))
             userAtConference = true;
         return userAtConference;
     }
 
+    private ArrayList<Interest> userInterests;
+    private ArrayList<String> foundContacts;
+    private HashMap<String, ArrayList<Interest>> contacts;
+
+    private void pairUsers() {
+        userInterests = new ArrayList<>();
+        foundContacts = new ArrayList<>();
+        contacts = new HashMap<>();
+
+        new PairUser().execute("");
+    }
+
+    private void addContact(String contact) {
+        String user = firebase.getAuth().getUid();
+        HashMap<String, Object> contacts = new HashMap<>();
+        contacts.put(user, user);
+        firebase.child("users").child(contact).child("contacts").updateChildren(contacts);
+
+        contacts = new HashMap<>();
+        contacts.put(contact, contact);
+        firebase.child("users").child(user).child("contacts").updateChildren(contacts);
+    }
+
     private void finishTracking() {
-        if(googleApiClient.isConnected()){
+        if (googleApiClient.isConnected()) {
             LocationServices.FusedLocationApi.removeLocationUpdates(googleApiClient, this);
             googleApiClient.disconnect();
         }
     }
 
     private void updateValuesFromBundle(Bundle savedInstanceState) {
-        if(savedInstanceState != null) {
+        if (savedInstanceState != null) {
             if (savedInstanceState.keySet().contains(REQUESTING_LOCATION_UPDATES_KEY)) {
                 requestingLocationUpdates = savedInstanceState.getBoolean(
                         REQUESTING_LOCATION_UPDATES_KEY);
@@ -325,73 +398,94 @@ public class ViewConferenceActivity extends AppCompatActivity implements
         super.onSaveInstanceState(savedInstanceState);
     }
 
-    private void pairUsers() {
-        final ArrayList<Interest> userInterests = new ArrayList<>();
-        ArrayList<Interest> contactInterests = new ArrayList<>();
+    private class PairUser extends AsyncTask<String, Void, String> {
 
-        firebase.child("users").child(firebase.getAuth().getUid()).child("tags").addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                Interest interest = dataSnapshot.getValue(Interest.class);
-                if(!userInterests.contains(interest))
-                    userInterests.add(interest);
+        @Override
+        protected String doInBackground(String... params) {
+            // Get user interests.
+            Log.d(TAG, "Getting user interests.");
+            userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    User user = dataSnapshot.getValue(User.class);
+                    userInterests = user.getInterests();
+                    Log.d(TAG, "Added interests: " + userInterests);
+                }
+
+                @Override
+                public void onCancelled(FirebaseError firebaseError) {
+                    Log.d(TAG, firebaseError.getMessage());
+                }
+            });
+            Log.d(TAG, "User interests: " + userInterests);
+
+            // Find userID's to compare.
+            Log.d(TAG, "Finding other users to compare");
+            confRef.child("users").addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
+                        String contactUid = userSnapshot.getValue(String.class);
+                        if (!userSnapshot.getValue().equals(firebase.getAuth().getUid())) {
+                            if (!foundContacts.contains(contactUid))
+                                foundContacts.add(contactUid);
+                        }
+                    }
+                    Log.d(TAG, "Added users: " + foundContacts);
+                }
+
+                @Override
+                public void onCancelled(FirebaseError firebaseError) {
+                    Log.d(TAG, firebaseError.getMessage());
+                }
+            });
+            Log.d(TAG, "Other users: " + foundContacts);
+
+            Log.d(TAG, "Get users and interests.");
+            firebase.child("users").addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
+                        User user = userSnapshot.getValue(User.class);
+                        if (!userSnapshot.getKey().equals(firebase.getAuth().getUid())) {
+                            if (foundContacts.contains(userSnapshot.getKey()))
+                                contacts.put(userSnapshot.getKey(), user.getInterests());
+                        }
+                    }
+                    Log.d(TAG, "Added users and their interests to map: " + contacts);
+                }
+
+                @Override
+                public void onCancelled(FirebaseError firebaseError) {
+                    Log.d(TAG, firebaseError.getMessage());
+                }
+            });
+            Log.d(TAG, "Hash Map with users and interests: " + contacts);
+
+            return "executed";
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+
+            Log.d(TAG, "Comparing interests");
+            for (Map.Entry<String, ArrayList<Interest>> contact : contacts.entrySet()) {
+                for (Interest interest : contact.getValue()) {
+                    if (!userInterests.contains(interest)) ;
+                    {
+                        addContact(contact.getKey());
+                        Log.d(TAG, "Match found! User: " + contact.getKey() + " Interest: " + interest);
+                    }
+                }
             }
+            Log.d(TAG, "pairUsers() finished.");
+        }
 
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+        @Override
+        protected void onPreExecute() {}
 
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-                Interest interest = dataSnapshot.getValue(Interest.class);
-                if(userInterests.contains(interest))
-                    userInterests.remove(interest);
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onCancelled(FirebaseError firebaseError) {
-
-            }
-        });
-
-//        for(String contact : confRef.child("users"))
-//
-//        firebase.child("users").child().child("tags").addChildEventListener(new ChildEventListener() {
-//            @Override
-//            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-//                Interest tag = dataSnapshot.getValue(Interest.class);
-//                if(!userInterests.contains(tag))
-//                    userInterests.add(tag);
-//            }
-//
-//            @Override
-//            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-//
-//            }
-//
-//            @Override
-//            public void onChildRemoved(DataSnapshot dataSnapshot) {
-//                Interest tag = dataSnapshot.getValue(Interest.class);
-//                if(userInterests.contains(tag))
-//                    userInterests.remove(tag);
-//            }
-//
-//            @Override
-//            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-//
-//            }
-//
-//            @Override
-//            public void onCancelled(FirebaseError firebaseError) {
-//
-//            }
-//        });
+        @Override
+        protected void onProgressUpdate(Void... values) {}
     }
 }
 

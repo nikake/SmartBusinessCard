@@ -71,6 +71,8 @@
 
     <string name="conference_view_description">Description</string>
     <string name="conference_view_name">Name</string>
+    <string name="conference_view_feedback_false">Not checked in</string>
+    <string name="conference_view_feedback_true">Checked in</string>
     <string name="conference_button">Check in</string>
 
     <string name="maps_save">Save</string>

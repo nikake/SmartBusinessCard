@@ -73,6 +73,14 @@
 
     </LinearLayout>
 
+    <TextView android:id="@+id/view_conference_feedback"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        android:textColor="@color/red"
+        android:text="@string/conference_view_feedback_false"
+        android:gravity="center_horizontal"
+        android:background="@color/white"/>
     <Button
         android:id="@+id/view_conference_button"
         android:layout_width="match_parent"
