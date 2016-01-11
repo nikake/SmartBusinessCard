@@ -471,7 +471,7 @@ public class ViewConferenceActivity extends AppCompatActivity implements
             Log.d(TAG, "Comparing interests");
             for (Map.Entry<String, ArrayList<Interest>> contact : contacts.entrySet()) {
                 for (Interest interest : contact.getValue()) {
-                    if (!userInterests.contains(interest)) ;
+                    if (userInterests.contains(interest)) ;
                     {
                         addContact(contact.getKey());
                         Log.d(TAG, "Match found! User: " + contact.getKey() + " Interest: " + interest);
