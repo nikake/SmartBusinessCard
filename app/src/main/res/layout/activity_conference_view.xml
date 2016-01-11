@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="3"
+        android:background="@drawable/side_nav_bar">
+
+        <TextView
+            android:id="@+id/view_conference_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:text="@string/conference_view_name"
+            android:textColor="@color/white"
+            android:textSize="36sp" />
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        android:layout_weight="5"
+        android:background="@color/white"
+        android:orientation="vertical"
+        android:padding="8dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/conference_view_description"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/view_conference_description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textSize="18sp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="30dp"
+            android:text="Date:"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/view_conference_date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textSize="18sp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="30dp"
+            android:text="Time:"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/view_conference_time"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textSize="18sp" />
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/view_conference_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:background="@drawable/buttons"
+        android:onClick="checkIn"
+        android:text="@string/conference_button" />
+
+</LinearLayout>
