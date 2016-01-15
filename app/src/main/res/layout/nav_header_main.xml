@@ -26,6 +26,6 @@
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Project Group 7" />
+        android:text="Project Group 8" />
 
 </LinearLayout>

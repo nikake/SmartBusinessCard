@@ -22,6 +22,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.firebase.client.ChildEventListener;
 import com.firebase.client.DataSnapshot;
@@ -317,8 +318,10 @@ public class ViewConferenceActivity extends AppCompatActivity implements
             deactivateButton();
             Log.d(TAG, "Pairing users..");
             pairUsers();
-        } else
+        } else {
             Log.d(TAG, "User not in range of Conference. User is not checked in.");
+            Toast.makeText(this, "Not in range of conference.", Toast.LENGTH_LONG).show();
+        }
     }
 
     private void registerUserToConference() {
@@ -361,15 +364,55 @@ public class ViewConferenceActivity extends AppCompatActivity implements
         new PairUser().execute("");
     }
 
-    private void addContact(String contact) {
-        String user = firebase.getAuth().getUid();
-        HashMap<String, Object> contacts = new HashMap<>();
-        contacts.put(user, user);
-        firebase.child("users").child(contact).child("contacts").updateChildren(contacts);
+    ArrayList<String> userContacts;
+    ArrayList<String> contactContacts;
 
-        contacts = new HashMap<>();
-        contacts.put(contact, contact);
-        firebase.child("users").child(user).child("contacts").updateChildren(contacts);
+    String userAddContact;
+    String contactAddContact;
+
+    private void addContact(String contact) {
+        userAddContact = firebase.getAuth().getUid();
+        contactAddContact = contact;
+        userContacts = new ArrayList<>();
+
+        firebase.child("users").child(userAddContact).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                User user = dataSnapshot.getValue(User.class);
+                if (user.getContacts() != null)
+                    userContacts = user.getContacts();
+                if (!userContacts.contains(contactAddContact))
+                    userContacts.add(contactAddContact);
+                firebase.child("users").child(userAddContact).child("contacts").setValue(userContacts);
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
+
+        Log.d(TAG, "Adding contact to user");
+
+        contactContacts = new ArrayList<>();
+
+        firebase.child("users").child(contactAddContact).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                User contact = dataSnapshot.getValue(User.class);
+                if(contact.getContacts() != null)
+                    contactContacts = contact.getContacts();
+                if (!contactContacts.contains(userAddContact))
+                    contactContacts.add(userAddContact);
+                firebase.child("users").child(contactAddContact).child("contacts").setValue(contactContacts);
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
+        Log.d(TAG, "Adding user to contact");
     }
 
     private void finishTracking() {
